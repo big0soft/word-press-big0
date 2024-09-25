@@ -1,4 +1,15 @@
 services:
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    links:
+      - wordpress
+    restart: always
+    environment:
+      DOMAINS: 'wordpress.ahmad-dev.com -> http://ahmad-dev.com:8000'
+
   mysql_database:
     image: mysql
     restart: always
@@ -8,7 +19,7 @@ services:
       - MYSQL_USER=wp_user
       - MYSQL_PASSWORD=1234
     volumes:
-      - mysql:/var/lib/mysql  
+      - mysql:/var/lib/mysql
   wordpress:
     depends_on:
       - mysql_database
@@ -28,8 +39,8 @@ services:
       - mysql_database
     image: phpmyadmin/phpmyadmin
     restart: always
-    ports: 
-      - "8080:80"
+    ports:
+      - "8082:80"
     environment:
       PMA_HOST: mysql_database
       MYSQL_ROOT_PASSWORD: 1234
